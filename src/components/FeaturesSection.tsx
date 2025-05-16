@@ -46,8 +46,8 @@ const FeaturesSection = () => {
                   <Check className="h-5 w-5 text-market-primary" />
                 </div>
                 <div className="ml-3">
-                  <h3 className="font-medium">Multiple Payment Options</h3>
-                  <p className="mt-1 text-sm text-gray-600">Pay online or in-store</p>
+                  <h3 className="font-medium">Contactless Pickup</h3>
+                  <p className="mt-1 text-sm text-gray-600">Quick & easy in-store collection</p>
                 </div>
               </div>
             </div>

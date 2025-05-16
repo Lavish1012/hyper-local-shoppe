@@ -336,7 +336,7 @@ const UserDashboard = () => {
               <TabsContent value="orders" className="space-y-6">
                 <div>
                   <h2 className="text-2xl font-bold">My Orders</h2>
-                  <p className="text-gray-600">Track and manage your current and previous orders</p>
+                  <p className="text-gray-600">Track and manage your in-store pickup orders</p>
                 </div>
                 
                 <div className="space-y-4">

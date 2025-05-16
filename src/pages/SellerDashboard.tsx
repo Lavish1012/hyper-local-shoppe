@@ -160,7 +160,7 @@ const SellerDashboard = () => {
     {
       id: 3,
       customer: "Rohan Kapoor",
-      message: "Thanks for the quick delivery!",
+      message: "Thanks for the quick pickup experience!",
       time: "May 15",
       unread: false
     }
@@ -406,8 +406,8 @@ const SellerDashboard = () => {
               <TabsContent value="orders" className="space-y-6">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                   <div>
-                    <h2 className="text-2xl font-bold">Orders</h2>
-                    <p className="text-gray-600">Manage all your customer orders</p>
+                    <h2 className="text-2xl font-bold">In-Store Pickup Orders</h2>
+                    <p className="text-gray-600">Manage customer pickup orders</p>
                   </div>
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm">

@@ -18,8 +18,8 @@ const steps = [
   },
   {
     icon: <ShoppingBag className="h-8 w-8 text-white" />,
-    title: "Reserve or buy",
-    description: "Reserve items for pickup or pay online for faster collection.",
+    title: "Reserve items",
+    description: "Reserve items online for guaranteed availability when you arrive.",
     color: "bg-market-accent"
   },
   {
