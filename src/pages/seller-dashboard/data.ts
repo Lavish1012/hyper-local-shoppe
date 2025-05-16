@@ -16,7 +16,7 @@ export const recentOrders = [
     date: "May 16, 2025", 
     items: 1, 
     total: "₹249.50", 
-    status: "Completed" 
+    status: "Picked up" 
   },
   { 
     id: "ORD-5880", 
@@ -24,7 +24,7 @@ export const recentOrders = [
     date: "May 15, 2025", 
     items: 3, 
     total: "₹799.00", 
-    status: "Completed" 
+    status: "Picked up" 
   },
   { 
     id: "ORD-5878", 
@@ -32,7 +32,7 @@ export const recentOrders = [
     date: "May 15, 2025", 
     items: 1, 
     total: "₹3,499.00", 
-    status: "Completed" 
+    status: "Picked up" 
   },
   { 
     id: "ORD-5872", 
@@ -40,7 +40,7 @@ export const recentOrders = [
     date: "May 14, 2025", 
     items: 2, 
     total: "₹545.00", 
-    status: "Completed" 
+    status: "Picked up" 
   }
 ];
 

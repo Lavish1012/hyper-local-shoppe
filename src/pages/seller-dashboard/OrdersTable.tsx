@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Checkbox } from "@/components/ui/checkbox";
+import { Package, PackageCheck } from "lucide-react";
 
 interface Order {
   id: string;
@@ -40,7 +41,7 @@ const OrdersTable = ({ orders, showCheckbox = false, showActions = false }: Orde
           <TableHead>Date</TableHead>
           <TableHead>Items</TableHead>
           <TableHead>Total</TableHead>
-          <TableHead>Status</TableHead>
+          <TableHead>Pickup Status</TableHead>
           {showActions && <TableHead className="text-right">Actions</TableHead>}
         </TableRow>
       </TableHeader>
@@ -58,11 +59,16 @@ const OrdersTable = ({ orders, showCheckbox = false, showActions = false }: Orde
             <TableCell>{order.items}</TableCell>
             <TableCell>{order.total}</TableCell>
             <TableCell>
-              <span className={`px-2 py-1 rounded-full text-xs ${
+              <span className={`px-2 py-1 rounded-full text-xs flex items-center w-fit ${
                 order.status === "Ready for pickup" 
-                  ? "bg-green-100 text-green-800" 
-                  : "bg-blue-100 text-blue-800"
+                  ? "bg-amber-100 text-amber-800" 
+                  : "bg-green-100 text-green-800"
               }`}>
+                {order.status === "Ready for pickup" ? (
+                  <Package className="h-3 w-3 mr-1" />
+                ) : (
+                  <PackageCheck className="h-3 w-3 mr-1" />
+                )}
                 {order.status}
               </span>
             </TableCell>
