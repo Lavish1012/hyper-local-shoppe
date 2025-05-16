@@ -1,5 +1,7 @@
 
 import { Search, MapPin, ShoppingBag, CheckCircle } from "lucide-react";
+import { Link } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 
 const steps = [
   {
@@ -49,6 +51,19 @@ const HowItWorks = () => {
               <p className="text-gray-600">{step.description}</p>
             </div>
           ))}
+        </div>
+
+        <div className="mt-12 flex flex-col md:flex-row items-center justify-center gap-6">
+          <Link to="/user-dashboard">
+            <Button size="lg" className="bg-market-primary hover:bg-market-primary/90">
+              Try User Dashboard
+            </Button>
+          </Link>
+          <Link to="/seller-dashboard">
+            <Button size="lg" variant="outline" className="border-market-primary text-market-primary hover:bg-market-primary/10">
+              Try Seller Dashboard
+            </Button>
+          </Link>
         </div>
       </div>
     </section>

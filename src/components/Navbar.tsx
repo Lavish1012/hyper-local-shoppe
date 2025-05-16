@@ -42,10 +42,12 @@ const Navbar = () => {
             </nav>
 
             <div className="flex space-x-3">
-              <Button variant="outline" size="sm">
-                <User className="h-4 w-4 mr-2" />
-                Sign In
-              </Button>
+              <Link to="/user-dashboard">
+                <Button variant="outline" size="sm">
+                  <User className="h-4 w-4 mr-2" />
+                  Sign In
+                </Button>
+              </Link>
               <Button size="sm">Register</Button>
             </div>
           </div>
@@ -89,11 +91,15 @@ const Navbar = () => {
             </nav>
 
             <div className="mt-4 space-y-2">
-              <Button variant="outline" className="w-full">
-                <User className="h-4 w-4 mr-2" />
-                Sign In
-              </Button>
-              <Button className="w-full">Register</Button>
+              <Link to="/user-dashboard" className="block w-full">
+                <Button variant="outline" className="w-full">
+                  <User className="h-4 w-4 mr-2" />
+                  User Dashboard
+                </Button>
+              </Link>
+              <Link to="/seller-dashboard" className="block w-full">
+                <Button className="w-full">Seller Dashboard</Button>
+              </Link>
             </div>
           </div>
         )}
