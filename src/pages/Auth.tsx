@@ -42,22 +42,21 @@ export default function Auth() {
   useEffect(() => {
     const verified = searchParams.get('verified');
     
-    if (user) {
-      if (verified === 'true' || isEmailVerified) {
-        // User just verified email or is already verified, redirect to onboarding
-        toast({
-          title: 'Email verified!',
-          description: 'Let\'s complete your profile setup.',
-        });
-        navigate('/onboarding');
-      } else if (!isEmailVerified) {
-        // User is signed in but email not verified, show verification pending
-        setShowVerificationPending(true);
-        setPendingEmail(user.email || '');
-      } else {
-        // Fallback: redirect to onboarding
-        navigate('/onboarding');
-      }
+    if (user && isEmailVerified) {
+      // User is authenticated and email is verified, redirect to onboarding
+      toast({
+        title: 'Welcome!',
+        description: 'Let\'s complete your profile setup.',
+      });
+      navigate('/onboarding');
+      return;
+    }
+    
+    if (user && !isEmailVerified) {
+      // User is signed in but email not verified, show verification pending
+      setShowVerificationPending(true);
+      setPendingEmail(user.email || '');
+      return;
     }
     
     // If coming from email verification but not signed in, show success message
@@ -66,9 +65,11 @@ export default function Auth() {
         title: 'Email verified successfully!',
         description: 'Please sign in to continue to your personalized dashboard.',
       });
-      // Clear the URL parameter
-      searchParams.delete('verified');
-      navigate('/auth?' + searchParams.toString(), { replace: true });
+      // Clear the URL parameter to prevent repeated toasts
+      const newSearchParams = new URLSearchParams(searchParams);
+      newSearchParams.delete('verified');
+      const newUrl = newSearchParams.toString() ? '/auth?' + newSearchParams.toString() : '/auth';
+      navigate(newUrl, { replace: true });
     }
   }, [user, isEmailVerified, navigate, searchParams, toast]);
 
