@@ -9,7 +9,7 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { EmailVerificationPending } from '@/components/EmailVerificationPending';
+import { CodeVerificationPending } from '@/components/CodeVerificationPending';
 import { Loader2, Eye, EyeOff, ArrowLeft, User, Store, CheckCircle } from 'lucide-react';
 
 export default function Auth() {
@@ -137,7 +137,7 @@ export default function Auth() {
     } else {
       toast({
         title: 'Check your email!',
-        description: 'We sent you a verification link to complete your account setup.',
+        description: 'We sent you a verification code to complete your account setup.',
       });
       setShowVerificationPending(true);
       setPendingEmail(signupData.email);
@@ -149,7 +149,7 @@ export default function Auth() {
   // Show verification pending screen if needed
   if (showVerificationPending) {
     return (
-      <EmailVerificationPending
+      <CodeVerificationPending
         email={pendingEmail}
         onVerificationComplete={() => {
           setShowVerificationPending(false);
