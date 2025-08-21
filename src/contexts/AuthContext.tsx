@@ -76,12 +76,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, fullName?: string, role: UserRole = 'customer') => {
-    // Create user account without email confirmation
-    const { error } = await supabase.auth.signUp({
+    // Use OTP-based signup to send verification code via email
+    const { error } = await supabase.auth.signInWithOtp({
       email,
-      password,
       options: {
-        emailRedirectTo: `${window.location.origin}/auth`,
+        shouldCreateUser: true,
         data: {
           full_name: fullName || email,
           role: role,
@@ -93,9 +92,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   };
 
   const resendVerification = async (email: string) => {
-    const { error } = await supabase.auth.resend({
-      type: 'signup',
-      email: email,
+    const { error } = await supabase.auth.signInWithOtp({
+      email,
+      options: {
+        shouldCreateUser: false
+      }
     });
     return { error };
   };
