@@ -6,9 +6,10 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Eye, EyeOff, ArrowLeft } from 'lucide-react';
+import { Loader2, Eye, EyeOff, ArrowLeft, User, Store } from 'lucide-react';
 
 export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
@@ -30,6 +31,7 @@ export default function Auth() {
     password: '',
     confirmPassword: '',
     fullName: '',
+    role: 'customer' as 'customer' | 'seller',
   });
 
   // Redirect if already authenticated
@@ -92,7 +94,7 @@ export default function Auth() {
       return;
     }
 
-    const { error } = await signUp(signupData.email, signupData.password, signupData.fullName);
+    const { error } = await signUp(signupData.email, signupData.password, signupData.fullName, signupData.role);
 
     if (error) {
       if (error.message.includes('User already registered')) {
@@ -111,6 +113,7 @@ export default function Auth() {
         password: '',
         confirmPassword: '',
         fullName: '',
+        role: 'customer',
       });
     }
 
@@ -228,6 +231,35 @@ export default function Auth() {
                       disabled={isLoading}
                       autoComplete="email"
                     />
+                  </div>
+
+                  <div className="space-y-2">
+                    <Label htmlFor="role-select">I am a</Label>
+                    <Select
+                      value={signupData.role}
+                      onValueChange={(value: 'customer' | 'seller') => 
+                        setSignupData(prev => ({ ...prev, role: value }))
+                      }
+                      disabled={isLoading}
+                    >
+                      <SelectTrigger id="role-select">
+                        <SelectValue placeholder="Select your role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="customer">
+                          <div className="flex items-center gap-2">
+                            <User className="h-4 w-4" />
+                            Customer - I want to buy products
+                          </div>
+                        </SelectItem>
+                        <SelectItem value="seller">
+                          <div className="flex items-center gap-2">
+                            <Store className="h-4 w-4" />
+                            Seller - I want to sell products
+                          </div>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
                   </div>
 
                   <div className="space-y-2">

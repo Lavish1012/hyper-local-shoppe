@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, ShoppingBag, Menu, X, User, MapPin, LogOut } from "lucide-react";
+import { Search, ShoppingBag, Menu, X, User, MapPin, LogOut, Store } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import {
@@ -17,7 +17,7 @@ import {
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [location] = useState("New Delhi, India");
-  const { user, signOut, loading } = useAuth();
+  const { user, signOut, userRole, loading } = useAuth();
   const { toast } = useToast();
 
   const handleSignOut = async () => {
@@ -80,11 +80,23 @@ const Navbar = () => {
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="end" className="w-56">
+                        {userRole === 'seller' ? (
+                          <DropdownMenuItem asChild>
+                            <Link to="/seller-dashboard">
+                              <Store className="w-4 h-4 mr-2" />
+                              Seller Dashboard
+                            </Link>
+                          </DropdownMenuItem>
+                        ) : (
+                          <DropdownMenuItem asChild>
+                            <Link to="/customer-dashboard">
+                              <User className="w-4 h-4 mr-2" />
+                              Customer Dashboard
+                            </Link>
+                          </DropdownMenuItem>
+                        )}
                         <DropdownMenuItem asChild>
-                          <Link to="/user-dashboard">User Dashboard</Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem asChild>
-                          <Link to="/seller-dashboard">Seller Dashboard</Link>
+                          <Link to="/user-dashboard">Profile Settings</Link>
                         </DropdownMenuItem>
                         <DropdownMenuSeparator />
                         <DropdownMenuItem onClick={handleSignOut}>
@@ -155,16 +167,25 @@ const Navbar = () => {
                   {user ? (
                     <>
                       <div className="text-sm font-medium text-gray-900 mb-4">
-                        Welcome, {user.email?.split('@')[0]}
+                        Welcome, {user.email?.split('@')[0]} ({userRole})
                       </div>
+                      {userRole === 'seller' ? (
+                        <Link to="/seller-dashboard" className="block w-full">
+                          <Button variant="outline" className="w-full">
+                            <Store className="h-4 w-4 mr-2" />
+                            Seller Dashboard
+                          </Button>
+                        </Link>
+                      ) : (
+                        <Link to="/customer-dashboard" className="block w-full">
+                          <Button variant="outline" className="w-full">
+                            <User className="h-4 w-4 mr-2" />
+                            Customer Dashboard
+                          </Button>
+                        </Link>
+                      )}
                       <Link to="/user-dashboard" className="block w-full">
-                        <Button variant="outline" className="w-full">
-                          <User className="h-4 w-4 mr-2" />
-                          User Dashboard
-                        </Button>
-                      </Link>
-                      <Link to="/seller-dashboard" className="block w-full">
-                        <Button variant="outline" className="w-full">Seller Dashboard</Button>
+                        <Button variant="outline" className="w-full">Profile Settings</Button>
                       </Link>
                       <Button 
                         variant="destructive" 
