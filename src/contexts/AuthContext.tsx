@@ -22,24 +22,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchUserRole = async (userId: string) => {
-    try {
-      const { data, error } = await supabase
-        .from('user_roles')
-        .select('role')
-        .eq('user_id', userId)
-        .single();
-      
-      if (error) {
-        console.error('Error fetching user role:', error);
-        return null;
-      }
-      
-      return data?.role as UserRole || null;
-    } catch (error) {
-      console.error('Error fetching user role:', error);
-      return null;
-    }
+  const getUserRole = (user: User | null): UserRole | null => {
+    if (!user?.user_metadata?.role) return null;
+    return user.user_metadata.role as UserRole;
   };
 
   useEffect(() => {
@@ -50,8 +35,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Fetch user role when user logs in
-          const role = await fetchUserRole(session.user.id);
+          // Get user role from metadata
+          const role = getUserRole(session.user);
           setUserRole(role);
         } else {
           setUserRole(null);
@@ -67,8 +52,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        // Fetch user role for existing session
-        const role = await fetchUserRole(session.user.id);
+        // Get user role from metadata for existing session
+        const role = getUserRole(session.user);
         setUserRole(role);
       } else {
         setUserRole(null);
