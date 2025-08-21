@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import { CustomerOnboarding } from '@/components/onboarding/CustomerOnboarding';
 import { SellerOnboarding } from '@/components/onboarding/SellerOnboarding';
+import { EmailVerificationPending } from '@/components/EmailVerificationPending';
 import { Card, CardContent } from '@/components/ui/card';
 import { Loader2 } from 'lucide-react';
 
 export default function Onboarding() {
-  const { user, userRole } = useAuth();
+  const { user, userRole, isEmailVerified } = useAuth();
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(true);
 
@@ -22,8 +23,16 @@ export default function Onboarding() {
       return;
     }
 
+    // Check if email is verified before allowing onboarding
+    if (!isEmailVerified) {
+      // Don't redirect immediately, just keep loading
+      // The user will be handled by the auth page
+      setIsLoading(true);
+      return;
+    }
+
     setIsLoading(false);
-  }, [user, userRole, navigate]);
+  }, [user, userRole, isEmailVerified, navigate]);
 
   const handleOnboardingComplete = () => {
     if (userRole === 'customer') {
@@ -45,6 +54,19 @@ export default function Onboarding() {
           </CardContent>
         </Card>
       </div>
+    );
+  }
+
+  // If user exists but email is not verified, show verification pending
+  if (user && !isEmailVerified) {
+    return (
+      <EmailVerificationPending
+        email={user.email || ''}
+        onVerificationComplete={() => {
+          // This will be handled by the auth state change
+          window.location.reload();
+        }}
+      />
     );
   }
 

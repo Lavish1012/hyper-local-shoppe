@@ -9,9 +9,11 @@ interface AuthContextType {
   session: Session | null;
   userRole: UserRole | null;
   loading: boolean;
+  isEmailVerified: boolean;
   signUp: (email: string, password: string, fullName?: string, role?: UserRole) => Promise<{ error: any }>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signOut: () => Promise<{ error: any }>;
+  resendVerification: (email: string) => Promise<{ error: any }>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -21,6 +23,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [userRole, setUserRole] = useState<UserRole | null>(null);
   const [loading, setLoading] = useState(true);
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
 
   const getUserRole = (user: User | null): UserRole | null => {
     if (!user?.user_metadata?.role) return null;
@@ -38,8 +41,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           // Get user role from metadata
           const role = getUserRole(session.user);
           setUserRole(role);
+          // Check email verification status
+          setIsEmailVerified(session.user.email_confirmed_at !== null);
         } else {
           setUserRole(null);
+          setIsEmailVerified(false);
         }
         
         setLoading(false);
@@ -55,8 +61,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         // Get user role from metadata for existing session
         const role = getUserRole(session.user);
         setUserRole(role);
+        // Check email verification status for existing session
+        setIsEmailVerified(session.user.email_confirmed_at !== null);
       } else {
         setUserRole(null);
+        setIsEmailVerified(false);
       }
       
       setLoading(false);
@@ -66,7 +75,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const signUp = async (email: string, password: string, fullName?: string, role: UserRole = 'customer') => {
-    const redirectUrl = `${window.location.origin}/`;
+    const redirectUrl = `${window.location.origin}/auth?verified=true`;
     
     const { error } = await supabase.auth.signUp({
       email,
@@ -77,6 +86,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
           full_name: fullName || email,
           role: role,
         }
+      }
+    });
+    return { error };
+  };
+
+  const resendVerification = async (email: string) => {
+    const redirectUrl = `${window.location.origin}/auth?verified=true`;
+    
+    const { error } = await supabase.auth.resend({
+      type: 'signup',
+      email: email,
+      options: {
+        emailRedirectTo: redirectUrl,
       }
     });
     return { error };
@@ -100,9 +122,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     session,
     userRole,
     loading,
+    isEmailVerified,
     signUp,
     signIn,
     signOut,
+    resendVerification,
   };
 
   // Don't render children until we've checked the initial auth state

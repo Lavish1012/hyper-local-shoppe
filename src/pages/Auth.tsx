@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -9,15 +9,19 @@ import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Loader2, Eye, EyeOff, ArrowLeft, User, Store } from 'lucide-react';
+import { EmailVerificationPending } from '@/components/EmailVerificationPending';
+import { Loader2, Eye, EyeOff, ArrowLeft, User, Store, CheckCircle } from 'lucide-react';
 
 export default function Auth() {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const { signIn, signUp, user } = useAuth();
+  const [showVerificationPending, setShowVerificationPending] = useState(false);
+  const [pendingEmail, setPendingEmail] = useState('');
+  const { signIn, signUp, user, isEmailVerified } = useAuth();
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
 
   // Login form state
   const [loginData, setLoginData] = useState({
@@ -36,12 +40,37 @@ export default function Auth() {
 
   // Redirect authenticated users appropriately
   useEffect(() => {
+    const verified = searchParams.get('verified');
+    
     if (user) {
-      // Check if user has completed onboarding by checking for profile data
-      // For now, redirect to onboarding for role-based setup
-      navigate('/onboarding');
+      if (verified === 'true' || isEmailVerified) {
+        // User just verified email or is already verified, redirect to onboarding
+        toast({
+          title: 'Email verified!',
+          description: 'Let\'s complete your profile setup.',
+        });
+        navigate('/onboarding');
+      } else if (!isEmailVerified) {
+        // User is signed in but email not verified, show verification pending
+        setShowVerificationPending(true);
+        setPendingEmail(user.email || '');
+      } else {
+        // Fallback: redirect to onboarding
+        navigate('/onboarding');
+      }
     }
-  }, [user, navigate]);
+    
+    // If coming from email verification but not signed in, show success message
+    if (verified === 'true' && !user) {
+      toast({
+        title: 'Email verified successfully!',
+        description: 'Please sign in to continue to your personalized dashboard.',
+      });
+      // Clear the URL parameter
+      searchParams.delete('verified');
+      navigate('/auth?' + searchParams.toString(), { replace: true });
+    }
+  }, [user, isEmailVerified, navigate, searchParams, toast]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -106,14 +135,28 @@ export default function Auth() {
       }
     } else {
       toast({
-        title: 'Account created!',
-        description: 'Let\'s set up your profile.',
+        title: 'Check your email!',
+        description: 'We sent you a verification link to complete your account setup.',
       });
-      navigate('/onboarding');
+      setShowVerificationPending(true);
+      setPendingEmail(signupData.email);
     }
 
     setIsLoading(false);
   };
+
+  // Show verification pending screen if needed
+  if (showVerificationPending) {
+    return (
+      <EmailVerificationPending
+        email={pendingEmail}
+        onVerificationComplete={() => {
+          setShowVerificationPending(false);
+          navigate('/onboarding');
+        }}
+      />
+    );
+  }
 
   return (
     <div className="min-h-screen bg-background flex items-center justify-center p-4">
