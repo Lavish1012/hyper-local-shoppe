@@ -105,16 +105,9 @@ export default function Auth() {
     } else {
       toast({
         title: 'Account created!',
-        description: 'Please check your email to confirm your account.',
+        description: 'Let\'s set up your profile.',
       });
-      // Reset form
-      setSignupData({
-        email: '',
-        password: '',
-        confirmPassword: '',
-        fullName: '',
-        role: 'customer',
-      });
+      navigate('/onboarding');
     }
 
     setIsLoading(false);
