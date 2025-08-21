@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      customer_profiles: {
+        Row: {
+          address: string | null
+          age: number | null
+          city: string | null
+          created_at: string
+          id: string
+          location_lat: number | null
+          location_lng: number | null
+          notifications_email: boolean | null
+          notifications_sms: boolean | null
+          onboarding_completed: boolean | null
+          pincode: string | null
+          preferred_language: string | null
+          shopping_preferences:
+            | Database["public"]["Enums"]["product_category"][]
+            | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          age?: number | null
+          city?: string | null
+          created_at?: string
+          id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          notifications_email?: boolean | null
+          notifications_sms?: boolean | null
+          onboarding_completed?: boolean | null
+          pincode?: string | null
+          preferred_language?: string | null
+          shopping_preferences?:
+            | Database["public"]["Enums"]["product_category"][]
+            | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          age?: number | null
+          city?: string | null
+          created_at?: string
+          id?: string
+          location_lat?: number | null
+          location_lng?: number | null
+          notifications_email?: boolean | null
+          notifications_sms?: boolean | null
+          onboarding_completed?: boolean | null
+          pincode?: string | null
+          preferred_language?: string | null
+          shopping_preferences?:
+            | Database["public"]["Enums"]["product_category"][]
+            | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           avatar_url: string | null
@@ -41,6 +101,93 @@ export type Database = {
           id?: string
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      seller_profiles: {
+        Row: {
+          closing_time: string | null
+          created_at: string
+          delivery_available: boolean | null
+          id: string
+          logo_url: string | null
+          onboarding_completed: boolean | null
+          opening_time: string | null
+          owner_name: string
+          payment_methods:
+            | Database["public"]["Enums"]["payment_method"][]
+            | null
+          phone_number: string
+          products_sold:
+            | Database["public"]["Enums"]["product_category"][]
+            | null
+          shop_address: string
+          shop_location_lat: number | null
+          shop_location_lng: number | null
+          shop_name: string
+          shop_pincode: string
+          store_image_url: string | null
+          store_type: Database["public"]["Enums"]["store_type"]
+          updated_at: string
+          user_id: string
+          weekly_holidays: string[] | null
+          whatsapp_number: string | null
+        }
+        Insert: {
+          closing_time?: string | null
+          created_at?: string
+          delivery_available?: boolean | null
+          id?: string
+          logo_url?: string | null
+          onboarding_completed?: boolean | null
+          opening_time?: string | null
+          owner_name: string
+          payment_methods?:
+            | Database["public"]["Enums"]["payment_method"][]
+            | null
+          phone_number: string
+          products_sold?:
+            | Database["public"]["Enums"]["product_category"][]
+            | null
+          shop_address: string
+          shop_location_lat?: number | null
+          shop_location_lng?: number | null
+          shop_name: string
+          shop_pincode: string
+          store_image_url?: string | null
+          store_type: Database["public"]["Enums"]["store_type"]
+          updated_at?: string
+          user_id: string
+          weekly_holidays?: string[] | null
+          whatsapp_number?: string | null
+        }
+        Update: {
+          closing_time?: string | null
+          created_at?: string
+          delivery_available?: boolean | null
+          id?: string
+          logo_url?: string | null
+          onboarding_completed?: boolean | null
+          opening_time?: string | null
+          owner_name?: string
+          payment_methods?:
+            | Database["public"]["Enums"]["payment_method"][]
+            | null
+          phone_number?: string
+          products_sold?:
+            | Database["public"]["Enums"]["product_category"][]
+            | null
+          shop_address?: string
+          shop_location_lat?: number | null
+          shop_location_lng?: number | null
+          shop_name?: string
+          shop_pincode?: string
+          store_image_url?: string | null
+          store_type?: Database["public"]["Enums"]["store_type"]
+          updated_at?: string
+          user_id?: string
+          weekly_holidays?: string[] | null
+          whatsapp_number?: string | null
         }
         Relationships: []
       }
@@ -79,6 +226,30 @@ export type Database = {
       }
     }
     Enums: {
+      payment_method: "cash" | "upi" | "card" | "bank_transfer"
+      product_category:
+        | "groceries"
+        | "stationery"
+        | "snacks"
+        | "household"
+        | "electronics"
+        | "bakery"
+        | "fruits_vegetables"
+        | "dairy"
+        | "medical"
+        | "clothing"
+        | "other"
+      store_type:
+        | "grocery"
+        | "dairy"
+        | "medical"
+        | "stationery"
+        | "bakery"
+        | "fruits_vegetables"
+        | "electronics"
+        | "clothing"
+        | "hardware"
+        | "other"
       user_role: "customer" | "seller"
     }
     CompositeTypes: {
@@ -207,6 +378,32 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      payment_method: ["cash", "upi", "card", "bank_transfer"],
+      product_category: [
+        "groceries",
+        "stationery",
+        "snacks",
+        "household",
+        "electronics",
+        "bakery",
+        "fruits_vegetables",
+        "dairy",
+        "medical",
+        "clothing",
+        "other",
+      ],
+      store_type: [
+        "grocery",
+        "dairy",
+        "medical",
+        "stationery",
+        "bakery",
+        "fruits_vegetables",
+        "electronics",
+        "clothing",
+        "hardware",
+        "other",
+      ],
       user_role: ["customer", "seller"],
     },
   },
