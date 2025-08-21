@@ -34,10 +34,12 @@ export default function Auth() {
     role: 'customer' as 'customer' | 'seller',
   });
 
-  // Redirect if already authenticated
+  // Redirect authenticated users appropriately
   useEffect(() => {
     if (user) {
-      navigate('/');
+      // Check if user has completed onboarding by checking for profile data
+      // For now, redirect to onboarding for role-based setup
+      navigate('/onboarding');
     }
   }, [user, navigate]);
 
@@ -65,7 +67,7 @@ export default function Auth() {
         title: 'Welcome back!',
         description: 'You have successfully signed in.',
       });
-      navigate('/');
+      // Don't redirect here - let the useEffect handle routing based on user state
     }
 
     setIsLoading(false);
