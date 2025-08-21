@@ -3,11 +3,38 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Search, ShoppingBag, Menu, X, User, MapPin } from "lucide-react";
+import { Search, ShoppingBag, Menu, X, User, MapPin, LogOut } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [location, setLocation] = useState("New Delhi, India");
+  const [location] = useState("New Delhi, India");
+  const { user, signOut, loading } = useAuth();
+  const { toast } = useToast();
+
+  const handleSignOut = async () => {
+    const { error } = await signOut();
+    if (error) {
+      toast({
+        title: "Error",
+        description: "Failed to sign out. Please try again.",
+        variant: "destructive",
+      });
+    } else {
+      toast({
+        title: "Signed out",
+        description: "You have been successfully signed out.",
+      });
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-sm border-b">
@@ -42,13 +69,45 @@ const Navbar = () => {
             </nav>
 
             <div className="flex space-x-3">
-              <Link to="/user-dashboard">
-                <Button variant="outline" size="sm">
-                  <User className="h-4 w-4 mr-2" />
-                  Sign In
-                </Button>
-              </Link>
-              <Button size="sm">Register</Button>
+              {!loading && (
+                <>
+                  {user ? (
+                    <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <Button variant="outline" size="sm">
+                          <User className="h-4 w-4 mr-2" />
+                          {user.email?.split('@')[0]}
+                        </Button>
+                      </DropdownMenuTrigger>
+                      <DropdownMenuContent align="end" className="w-56">
+                        <DropdownMenuItem asChild>
+                          <Link to="/user-dashboard">User Dashboard</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem asChild>
+                          <Link to="/seller-dashboard">Seller Dashboard</Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator />
+                        <DropdownMenuItem onClick={handleSignOut}>
+                          <LogOut className="w-4 h-4 mr-2" />
+                          Sign Out
+                        </DropdownMenuItem>
+                      </DropdownMenuContent>
+                    </DropdownMenu>
+                  ) : (
+                    <>
+                      <Link to="/auth">
+                        <Button variant="outline" size="sm">
+                          <User className="h-4 w-4 mr-2" />
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link to="/auth">
+                        <Button size="sm">Register</Button>
+                      </Link>
+                    </>
+                  )}
+                </>
+              )}
             </div>
           </div>
 
@@ -91,15 +150,46 @@ const Navbar = () => {
             </nav>
 
             <div className="mt-4 space-y-2">
-              <Link to="/user-dashboard" className="block w-full">
-                <Button variant="outline" className="w-full">
-                  <User className="h-4 w-4 mr-2" />
-                  User Dashboard
-                </Button>
-              </Link>
-              <Link to="/seller-dashboard" className="block w-full">
-                <Button className="w-full">Seller Dashboard</Button>
-              </Link>
+              {!loading && (
+                <>
+                  {user ? (
+                    <>
+                      <div className="text-sm font-medium text-gray-900 mb-4">
+                        Welcome, {user.email?.split('@')[0]}
+                      </div>
+                      <Link to="/user-dashboard" className="block w-full">
+                        <Button variant="outline" className="w-full">
+                          <User className="h-4 w-4 mr-2" />
+                          User Dashboard
+                        </Button>
+                      </Link>
+                      <Link to="/seller-dashboard" className="block w-full">
+                        <Button variant="outline" className="w-full">Seller Dashboard</Button>
+                      </Link>
+                      <Button 
+                        variant="destructive" 
+                        className="w-full"
+                        onClick={handleSignOut}
+                      >
+                        <LogOut className="w-4 h-4 mr-2" />
+                        Sign Out
+                      </Button>
+                    </>
+                  ) : (
+                    <>
+                      <Link to="/auth" className="block w-full">
+                        <Button variant="outline" className="w-full">
+                          <User className="h-4 w-4 mr-2" />
+                          Sign In
+                        </Button>
+                      </Link>
+                      <Link to="/auth" className="block w-full">
+                        <Button className="w-full">Register</Button>
+                      </Link>
+                    </>
+                  )}
+                </>
+              )}
             </div>
           </div>
         )}
