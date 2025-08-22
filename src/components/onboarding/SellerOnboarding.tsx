@@ -20,7 +20,11 @@ interface SellerOnboardingProps {
 interface SellerData {
   shopName: string;
   storeType: string;
-  shopAddress: string;
+  houseNumber: string;
+  areaStreet: string;
+  landmark: string;
+  city: string;
+  state: string;
   shopPincode: string;
   ownerName: string;
   phoneNumber: string;
@@ -70,6 +74,15 @@ const PAYMENT_METHODS = [
 
 const DAYS_OF_WEEK = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
 
+const INDIAN_STATES = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana',
+  'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
+  'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu',
+  'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi', 'Jammu and Kashmir',
+  'Ladakh', 'Andaman and Nicobar Islands', 'Chandigarh', 'Dadra and Nagar Haveli and Daman and Diu',
+  'Lakshadweep', 'Puducherry'
+];
+
 export function SellerOnboarding({ onComplete }: SellerOnboardingProps) {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -78,7 +91,11 @@ export function SellerOnboarding({ onComplete }: SellerOnboardingProps) {
   const [data, setData] = useState<SellerData>({
     shopName: '',
     storeType: '',
-    shopAddress: '',
+    houseNumber: '',
+    areaStreet: '',
+    landmark: '',
+    city: '',
+    state: '',
     shopPincode: '',
     ownerName: '',
     phoneNumber: '',
@@ -131,8 +148,12 @@ export function SellerOnboarding({ onComplete }: SellerOnboardingProps) {
           user_id: user.id,
           shop_name: data.shopName,
           store_type: data.storeType as any,
-          shop_address: data.shopAddress,
+          house_number: data.houseNumber || null,
+          area_street: data.areaStreet,
+          landmark: data.landmark || null,
+          shop_address: `${data.houseNumber ? data.houseNumber + ', ' : ''}${data.areaStreet}${data.landmark ? ', ' + data.landmark : ''}`,
           shop_pincode: data.shopPincode,
+          state: data.state,
           owner_name: data.ownerName,
           phone_number: data.phoneNumber,
           whatsapp_number: data.whatsappNumber || null,
@@ -225,13 +246,60 @@ export function SellerOnboarding({ onComplete }: SellerOnboardingProps) {
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="shopAddress">Shop Address *</Label>
-                <Textarea
-                  id="shopAddress"
-                  placeholder="Enter your complete shop address"
-                  value={data.shopAddress}
-                  onChange={(e) => setData(prev => ({ ...prev, shopAddress: e.target.value }))}
+                <Label htmlFor="houseNumber">Flat, House no., Building, Company, Apartment</Label>
+                <Input
+                  id="houseNumber"
+                  placeholder="e.g., Shop 15, ABC Complex"
+                  value={data.houseNumber}
+                  onChange={(e) => setData(prev => ({ ...prev, houseNumber: e.target.value }))}
                 />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="areaStreet">Area, Street, Sector, Village *</Label>
+                <Input
+                  id="areaStreet"
+                  placeholder="e.g., MG Road, Sector 14"
+                  value={data.areaStreet}
+                  onChange={(e) => setData(prev => ({ ...prev, areaStreet: e.target.value }))}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="landmark">Landmark (optional)</Label>
+                <Input
+                  id="landmark"
+                  placeholder="e.g., Near City Mall, Opposite Bank"
+                  value={data.landmark}
+                  onChange={(e) => setData(prev => ({ ...prev, landmark: e.target.value }))}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="city">Town/City *</Label>
+                <Input
+                  id="city"
+                  placeholder="Enter your city"
+                  value={data.city}
+                  onChange={(e) => setData(prev => ({ ...prev, city: e.target.value }))}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="state">State *</Label>
+                <Select
+                  value={data.state}
+                  onValueChange={(value) => setData(prev => ({ ...prev, state: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your state" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {INDIAN_STATES.map((state) => (
+                      <SelectItem key={state} value={state}>{state}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
@@ -462,7 +530,7 @@ export function SellerOnboarding({ onComplete }: SellerOnboardingProps) {
       case 1:
         return data.shopName.trim() !== '' && data.storeType !== '';
       case 2:
-        return data.shopAddress.trim() !== '' && data.shopPincode.trim() !== '';
+        return data.areaStreet.trim() !== '' && data.city.trim() !== '' && data.state.trim() !== '' && data.shopPincode.trim() !== '';
       case 3:
         return data.ownerName.trim() !== '' && data.phoneNumber.trim() !== '';
       case 5:

@@ -7,10 +7,35 @@ import DashboardSidebar from "./seller-dashboard/DashboardSidebar";
 import DashboardTab from "./seller-dashboard/tabs/DashboardTab";
 import OrdersTab from "./seller-dashboard/tabs/OrdersTab";
 import InventoryTab from "./seller-dashboard/tabs/InventoryTab";
-import { recentOrders, inventoryItems, customerMessages } from "./seller-dashboard/data";
+import { useSellerDashboardData } from "@/hooks/useSellerDashboardData";
 
 const SellerDashboard = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
+  const { orders, inventory, messages, stats, loading, error } = useSellerDashboardData();
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-500 mb-4">{error}</p>
+          <button 
+            onClick={() => window.location.reload()} 
+            className="px-4 py-2 bg-primary text-white rounded"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <SidebarProvider defaultOpen={true}>
@@ -29,15 +54,15 @@ const SellerDashboard = () => {
               </TabsList>
               
               <TabsContent value="dashboard">
-                <DashboardTab orders={recentOrders} customerMessages={customerMessages} />
+                <DashboardTab orders={orders} customerMessages={messages} stats={stats} />
               </TabsContent>
               
               <TabsContent value="orders">
-                <OrdersTab orders={recentOrders} />
+                <OrdersTab orders={orders} />
               </TabsContent>
               
               <TabsContent value="inventory">
-                <InventoryTab inventoryItems={inventoryItems} />
+                <InventoryTab inventoryItems={inventory} />
               </TabsContent>
             </Tabs>
           </div>

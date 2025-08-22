@@ -19,8 +19,11 @@ interface CustomerOnboardingProps {
 interface CustomerData {
   age?: number;
   preferredLanguage: string;
+  houseNumber: string;
+  areaStreet: string;
+  landmark: string;
   city: string;
-  address: string;
+  state: string;
   pincode: string;
   shoppingPreferences: string[];
   notificationsSms: boolean;
@@ -42,6 +45,15 @@ const SHOPPING_CATEGORIES = [
 
 const LANGUAGES = ['English', 'Hindi', 'Bengali', 'Telugu', 'Marathi', 'Tamil', 'Gujarati', 'Kannada', 'Malayalam', 'Punjabi'];
 
+const INDIAN_STATES = [
+  'Andhra Pradesh', 'Arunachal Pradesh', 'Assam', 'Bihar', 'Chhattisgarh', 'Goa', 'Gujarat', 'Haryana',
+  'Himachal Pradesh', 'Jharkhand', 'Karnataka', 'Kerala', 'Madhya Pradesh', 'Maharashtra', 'Manipur',
+  'Meghalaya', 'Mizoram', 'Nagaland', 'Odisha', 'Punjab', 'Rajasthan', 'Sikkim', 'Tamil Nadu',
+  'Telangana', 'Tripura', 'Uttar Pradesh', 'Uttarakhand', 'West Bengal', 'Delhi', 'Jammu and Kashmir',
+  'Ladakh', 'Andaman and Nicobar Islands', 'Chandigarh', 'Dadra and Nagar Haveli and Daman and Diu',
+  'Lakshadweep', 'Puducherry'
+];
+
 export function CustomerOnboarding({ onComplete }: CustomerOnboardingProps) {
   const { user } = useAuth();
   const { toast } = useToast();
@@ -49,8 +61,11 @@ export function CustomerOnboarding({ onComplete }: CustomerOnboardingProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [data, setData] = useState<CustomerData>({
     preferredLanguage: 'English',
+    houseNumber: '',
+    areaStreet: '',
+    landmark: '',
     city: '',
-    address: '',
+    state: '',
     pincode: '',
     shoppingPreferences: [],
     notificationsSms: false,
@@ -98,8 +113,11 @@ export function CustomerOnboarding({ onComplete }: CustomerOnboardingProps) {
           user_id: user.id,
           age: data.age || null,
           preferred_language: data.preferredLanguage,
+          house_number: data.houseNumber || null,
+          area_street: data.areaStreet || null,
+          landmark: data.landmark || null,
           city: data.city || null,
-          address: data.address || null,
+          state: data.state || null,
           pincode: data.pincode || null,
           shopping_preferences: data.shoppingPreferences as any,
           notifications_sms: data.notificationsSms,
@@ -181,7 +199,37 @@ export function CustomerOnboarding({ onComplete }: CustomerOnboardingProps) {
 
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="city">City *</Label>
+                <Label htmlFor="houseNumber">Flat, House no., Building, Company, Apartment</Label>
+                <Input
+                  id="houseNumber"
+                  placeholder="e.g., Flat 2B, Building A, XYZ Apartments"
+                  value={data.houseNumber}
+                  onChange={(e) => setData(prev => ({ ...prev, houseNumber: e.target.value }))}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="areaStreet">Area, Street, Sector, Village</Label>
+                <Input
+                  id="areaStreet"
+                  placeholder="e.g., MG Road, Sector 14"
+                  value={data.areaStreet}
+                  onChange={(e) => setData(prev => ({ ...prev, areaStreet: e.target.value }))}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="landmark">Landmark (optional)</Label>
+                <Input
+                  id="landmark"
+                  placeholder="e.g., Near City Mall, Opposite Bank"
+                  value={data.landmark}
+                  onChange={(e) => setData(prev => ({ ...prev, landmark: e.target.value }))}
+                />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="city">Town/City *</Label>
                 <Input
                   id="city"
                   placeholder="Enter your city"
@@ -191,13 +239,20 @@ export function CustomerOnboarding({ onComplete }: CustomerOnboardingProps) {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="address">Detailed Address</Label>
-                <Input
-                  id="address"
-                  placeholder="Enter your full address"
-                  value={data.address}
-                  onChange={(e) => setData(prev => ({ ...prev, address: e.target.value }))}
-                />
+                <Label htmlFor="state">State *</Label>
+                <Select
+                  value={data.state}
+                  onValueChange={(value) => setData(prev => ({ ...prev, state: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select your state" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {INDIAN_STATES.map((state) => (
+                      <SelectItem key={state} value={state}>{state}</SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="space-y-2">
@@ -305,7 +360,7 @@ export function CustomerOnboarding({ onComplete }: CustomerOnboardingProps) {
   const canProceed = () => {
     switch (currentStep) {
       case 2:
-        return data.city.trim() !== '';
+        return data.city.trim() !== '' && data.state.trim() !== '';
       default:
         return true;
     }

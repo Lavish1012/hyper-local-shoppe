@@ -18,9 +18,12 @@ export type Database = {
         Row: {
           address: string | null
           age: number | null
+          area_street: string | null
           city: string | null
           created_at: string
+          house_number: string | null
           id: string
+          landmark: string | null
           location_lat: number | null
           location_lng: number | null
           notifications_email: boolean | null
@@ -31,15 +34,19 @@ export type Database = {
           shopping_preferences:
             | Database["public"]["Enums"]["product_category"][]
             | null
+          state: string | null
           updated_at: string
           user_id: string
         }
         Insert: {
           address?: string | null
           age?: number | null
+          area_street?: string | null
           city?: string | null
           created_at?: string
+          house_number?: string | null
           id?: string
+          landmark?: string | null
           location_lat?: number | null
           location_lng?: number | null
           notifications_email?: boolean | null
@@ -50,15 +57,19 @@ export type Database = {
           shopping_preferences?:
             | Database["public"]["Enums"]["product_category"][]
             | null
+          state?: string | null
           updated_at?: string
           user_id: string
         }
         Update: {
           address?: string | null
           age?: number | null
+          area_street?: string | null
           city?: string | null
           created_at?: string
+          house_number?: string | null
           id?: string
+          landmark?: string | null
           location_lat?: number | null
           location_lng?: number | null
           notifications_email?: boolean | null
@@ -69,6 +80,7 @@ export type Database = {
           shopping_preferences?:
             | Database["public"]["Enums"]["product_category"][]
             | null
+          state?: string | null
           updated_at?: string
           user_id?: string
         }
@@ -106,10 +118,13 @@ export type Database = {
       }
       seller_profiles: {
         Row: {
+          area_street: string | null
           closing_time: string | null
           created_at: string
           delivery_available: boolean | null
+          house_number: string | null
           id: string
+          landmark: string | null
           logo_url: string | null
           onboarding_completed: boolean | null
           opening_time: string | null
@@ -126,6 +141,7 @@ export type Database = {
           shop_location_lng: number | null
           shop_name: string
           shop_pincode: string
+          state: string | null
           store_image_url: string | null
           store_type: Database["public"]["Enums"]["store_type"]
           updated_at: string
@@ -134,10 +150,13 @@ export type Database = {
           whatsapp_number: string | null
         }
         Insert: {
+          area_street?: string | null
           closing_time?: string | null
           created_at?: string
           delivery_available?: boolean | null
+          house_number?: string | null
           id?: string
+          landmark?: string | null
           logo_url?: string | null
           onboarding_completed?: boolean | null
           opening_time?: string | null
@@ -154,6 +173,7 @@ export type Database = {
           shop_location_lng?: number | null
           shop_name: string
           shop_pincode: string
+          state?: string | null
           store_image_url?: string | null
           store_type: Database["public"]["Enums"]["store_type"]
           updated_at?: string
@@ -162,10 +182,13 @@ export type Database = {
           whatsapp_number?: string | null
         }
         Update: {
+          area_street?: string | null
           closing_time?: string | null
           created_at?: string
           delivery_available?: boolean | null
+          house_number?: string | null
           id?: string
+          landmark?: string | null
           logo_url?: string | null
           onboarding_completed?: boolean | null
           opening_time?: string | null
@@ -182,6 +205,7 @@ export type Database = {
           shop_location_lng?: number | null
           shop_name?: string
           shop_pincode?: string
+          state?: string | null
           store_image_url?: string | null
           store_type?: Database["public"]["Enums"]["store_type"]
           updated_at?: string

@@ -9,30 +9,35 @@ import CustomerMessages from "../CustomerMessages";
 interface DashboardTabProps {
   orders: any[];
   customerMessages: any[];
+  stats: {
+    todayOrders: number;
+    todayRevenue: string;
+    inventoryAlerts: number;
+  };
 }
 
-const DashboardTab = ({ orders, customerMessages }: DashboardTabProps) => {
+const DashboardTab = ({ orders, customerMessages, stats }: DashboardTabProps) => {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <StatCard 
           title="Today's Orders"
-          value="12"
+          value={stats.todayOrders.toString()}
           trend="up"
           trendValue="+18% from yesterday"
         />
         
         <StatCard 
           title="Today's Revenue"
-          value="₹8,459"
+          value={stats.todayRevenue}
           trend="up"
           trendValue="+24% from yesterday"
         />
         
         <StatCard 
           title="Inventory Alerts"
-          value="3"
-          alert="2 low stock • 1 out of stock"
+          value={stats.inventoryAlerts.toString()}
+          alert={`${stats.inventoryAlerts} items need attention`}
         />
       </div>
       
