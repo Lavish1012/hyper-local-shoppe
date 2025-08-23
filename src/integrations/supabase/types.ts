@@ -221,6 +221,80 @@ export type Database = {
         }
         Relationships: []
       }
+      public_seller_profiles: {
+        Row: {
+          city: string | null
+          closing_time: string | null
+          created_at: string
+          delivery_available: boolean | null
+          general_area: string | null
+          id: string
+          logo_url: string | null
+          opening_time: string | null
+          payment_methods: string[] | null
+          products_sold: string[] | null
+          rating: number | null
+          seller_id: string
+          shop_name: string
+          state: string | null
+          store_image_url: string | null
+          store_type: Database["public"]["Enums"]["store_type"]
+          total_reviews: number | null
+          updated_at: string
+          weekly_holidays: string[] | null
+        }
+        Insert: {
+          city?: string | null
+          closing_time?: string | null
+          created_at?: string
+          delivery_available?: boolean | null
+          general_area?: string | null
+          id?: string
+          logo_url?: string | null
+          opening_time?: string | null
+          payment_methods?: string[] | null
+          products_sold?: string[] | null
+          rating?: number | null
+          seller_id: string
+          shop_name: string
+          state?: string | null
+          store_image_url?: string | null
+          store_type: Database["public"]["Enums"]["store_type"]
+          total_reviews?: number | null
+          updated_at?: string
+          weekly_holidays?: string[] | null
+        }
+        Update: {
+          city?: string | null
+          closing_time?: string | null
+          created_at?: string
+          delivery_available?: boolean | null
+          general_area?: string | null
+          id?: string
+          logo_url?: string | null
+          opening_time?: string | null
+          payment_methods?: string[] | null
+          products_sold?: string[] | null
+          rating?: number | null
+          seller_id?: string
+          shop_name?: string
+          state?: string | null
+          store_image_url?: string | null
+          store_type?: Database["public"]["Enums"]["store_type"]
+          total_reviews?: number | null
+          updated_at?: string
+          weekly_holidays?: string[] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "public_seller_profiles_seller_id_fkey"
+            columns: ["seller_id"]
+            isOneToOne: true
+            referencedRelation: "seller_profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       seller_profiles: {
         Row: {
           area_street: string | null
