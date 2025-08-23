@@ -24,7 +24,6 @@ const Footer = () => {
             <ul className="space-y-2">
               <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">How It Works</Link></li>
               <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">Find Nearby Shops</Link></li>
-              <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">Download App</Link></li>
               <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">Safety Tips</Link></li>
             </ul>
           </div>
@@ -49,11 +48,6 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-gray-200">
-          <p className="text-gray-500 text-sm text-center">
-            © {new Date().getFullYear()} LocalMarket Connect. All rights reserved.
-          </p>
-        </div>
       </div>
     </footer>
   );

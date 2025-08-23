@@ -8,8 +8,18 @@ import ShopSection from "@/components/ShopSection";
 import FeaturesSection from "@/components/FeaturesSection";
 import TestimonialSection from "@/components/TestimonialSection";
 import { motion } from "framer-motion";
+import { useScrollingSystem } from "@/hooks/useScrollingSystem";
 
 const Index = () => {
+  // Initialize the advanced scrolling system
+  useScrollingSystem({
+    enableKeyboardNav: true,
+    enableProgressIndicator: true,
+    enableImageCrossfade: true,
+    enableTextAnimation: true,
+    animationDuration: 800,
+    staggerDelay: 150,
+  });
   const fadeInUp = {
     initial: { opacity: 0, y: 60 },
     animate: { opacity: 1, y: 0 },
@@ -33,22 +43,22 @@ const Index = () => {
         initial="initial"
         animate="animate"
       >
-        <motion.div variants={fadeInUp}>
+        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/1080" aria-label="Hero Section">
           <HeroSection />
         </motion.div>
-        <motion.div variants={fadeInUp}>
+        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/900" aria-label="Categories Section">
           <CategorySection />
         </motion.div>
-        <motion.div variants={fadeInUp}>
+        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/800" aria-label="How It Works Section">
           <HowItWorks />
         </motion.div>
-        <motion.div variants={fadeInUp}>
+        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/950" aria-label="Shop Section">
           <ShopSection />
         </motion.div>
-        <motion.div variants={fadeInUp}>
+        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/850" aria-label="Features Section">
           <FeaturesSection />
         </motion.div>
-        <motion.div variants={fadeInUp}>
+        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/900" aria-label="Testimonials Section">
           <TestimonialSection />
         </motion.div>
       </motion.main>

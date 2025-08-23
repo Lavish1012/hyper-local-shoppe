@@ -65,7 +65,6 @@ const Navbar = () => {
             <nav className="flex space-x-6">
               <Link to="/for-shops" className="text-gray-700 hover:text-market-primary font-medium">For Businesses</Link>
               <Link to="/how-it-works" className="text-gray-700 hover:text-market-primary font-medium">How It Works</Link>
-              <Link to="/download" className="text-gray-700 hover:text-market-primary font-medium">Download App</Link>
             </nav>
 
             <div className="flex space-x-3">
@@ -158,7 +157,6 @@ const Navbar = () => {
             <nav className="space-y-3">
               <Link to="/for-shops" className="block text-gray-700 hover:text-market-primary font-medium">For Businesses</Link>
               <Link to="/how-it-works" className="block text-gray-700 hover:text-market-primary font-medium">How It Works</Link>
-              <Link to="/download" className="block text-gray-700 hover:text-market-primary font-medium">Download App</Link>
             </nav>
 
             <div className="mt-4 space-y-2">
