@@ -86,6 +86,53 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_sensitive_data: {
+        Row: {
+          address: string | null
+          created_at: string
+          house_number: string | null
+          id: string
+          landmark: string | null
+          location_lat: number | null
+          location_lng: number | null
+          pincode: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          house_number?: string | null
+          id?: string
+          landmark?: string | null
+          location_lat?: number | null
+          location_lng?: number | null
+          pincode?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          house_number?: string | null
+          id?: string
+          landmark?: string | null
+          location_lat?: number | null
+          location_lng?: number | null
+          pincode?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_sensitive_data_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "customer_profiles"
+            referencedColumns: ["user_id"]
+          },
+        ]
+      }
       messages: {
         Row: {
           created_at: string
