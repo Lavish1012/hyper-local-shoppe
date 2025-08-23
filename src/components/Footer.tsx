@@ -1,6 +1,6 @@
 
 import { Link } from 'react-router-dom';
-import { ShoppingBag, Facebook, Instagram, Twitter } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -16,17 +16,6 @@ const Footer = () => {
             <p className="mt-4 text-gray-600 text-sm">
               Connecting local shoppers with nearby businesses. Find what you need, when you need it, from stores just around the corner.
             </p>
-            <div className="mt-4 flex space-x-4">
-              <a href="#" className="text-gray-400 hover:text-market-primary">
-                <Facebook className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-market-primary">
-                <Instagram className="h-5 w-5" />
-              </a>
-              <a href="#" className="text-gray-400 hover:text-market-primary">
-                <Twitter className="h-5 w-5" />
-              </a>
-            </div>
           </div>
 
           {/* Links */}
@@ -37,7 +26,6 @@ const Footer = () => {
               <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">Find Nearby Shops</Link></li>
               <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">Download App</Link></li>
               <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">Safety Tips</Link></li>
-              <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">FAQ</Link></li>
             </ul>
           </div>
 
@@ -56,9 +44,6 @@ const Footer = () => {
             <h3 className="font-semibold text-gray-800 mb-4">Company</h3>
             <ul className="space-y-2">
               <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">About Us</Link></li>
-              <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">Careers</Link></li>
-              <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">Privacy Policy</Link></li>
-              <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">Terms of Service</Link></li>
               <li><Link to="#" className="text-gray-600 hover:text-market-primary text-sm">Contact Us</Link></li>
             </ul>
           </div>
