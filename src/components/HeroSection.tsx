@@ -1,11 +1,21 @@
 
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Search, MapPin } from "lucide-react";
+import mossRockFormation from "@/assets/moss-rock-formation.jpg";
 
 const HeroSection = () => {
   return (
-    <div className="hero-pattern py-16 lg:py-24">
-      <div className="container mx-auto px-4">
+    <div className="relative hero-pattern py-16 lg:py-24 overflow-hidden">
+      {/* Moss rock formation background */}
+      <div 
+        className="absolute inset-0 opacity-20 bg-cover bg-center bg-no-repeat"
+        style={{
+          backgroundImage: `url(${mossRockFormation})`,
+          backgroundPosition: 'right bottom',
+          backgroundSize: 'contain'
+        }}
+      />
+      <div className="container mx-auto px-4 relative z-10">
         <div className="flex flex-col-reverse lg:flex-row items-center">
         <div data-scroll-text className="lg:w-1/2 mt-10 lg:mt-0 animate-fade-in">
           <h1 data-scroll-text className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
