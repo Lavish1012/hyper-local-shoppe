@@ -7,9 +7,10 @@ import InventoryTable from "../InventoryTable";
 
 interface InventoryTabProps {
   inventoryItems: any[];
+  setActiveTab: (tab: string) => void;
 }
 
-const InventoryTab = ({ inventoryItems }: InventoryTabProps) => {
+const InventoryTab = ({ inventoryItems, setActiveTab }: InventoryTabProps) => {
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -18,7 +19,10 @@ const InventoryTab = ({ inventoryItems }: InventoryTabProps) => {
           <p className="text-gray-600">Manage your product inventory</p>
         </div>
         <div className="flex gap-2">
-          <Button className="bg-market-primary hover:bg-market-primary/90">
+          <Button 
+            className="bg-market-primary hover:bg-market-primary/90"
+            onClick={() => setActiveTab("products")}
+          >
             <Plus className="h-4 w-4 mr-2" />
             Add Product
           </Button>

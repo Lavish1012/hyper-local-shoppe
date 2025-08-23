@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -9,6 +9,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Badge } from "@/components/ui/badge";
 import { Plus, Edit, Trash2, Upload, Package } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Product {
   id: string;
@@ -41,10 +43,12 @@ const categories = [
 ];
 
 const ProductsTab = ({ products = [] }: ProductsTabProps) => {
-  const [productList, setProductList] = useState<Product[]>(products);
+  const [productList, setProductList] = useState<Product[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
   const { toast } = useToast();
+  const { user } = useAuth();
 
   const [formData, setFormData] = useState({
     name: '',
@@ -54,6 +58,48 @@ const ProductsTab = ({ products = [] }: ProductsTabProps) => {
     quantity: '',
     image: ''
   });
+
+  useEffect(() => {
+    if (user) {
+      fetchProducts();
+    }
+  }, [user]);
+
+  const fetchProducts = async () => {
+    try {
+      setLoading(true);
+      const { data, error } = await supabase
+        .from('products')
+        .select('*')
+        .eq('seller_id', user?.id)
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      const transformedProducts: Product[] = (data || []).map(product => ({
+        id: product.id,
+        name: product.name,
+        description: product.description || '',
+        category: product.category,
+        price: parseFloat(product.price.toString()),
+        quantity: product.quantity,
+        image: product.image_url || '/api/placeholder/300/200',
+        status: product.status as 'active' | 'inactive' | 'out_of_stock',
+        created_at: product.created_at
+      }));
+
+      setProductList(transformedProducts);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+      toast({
+        title: "Error",
+        description: "Failed to fetch products",
+        variant: "destructive"
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const resetForm = () => {
     setFormData({
@@ -67,7 +113,7 @@ const ProductsTab = ({ products = [] }: ProductsTabProps) => {
     setEditingProduct(null);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!formData.name || !formData.category || !formData.price || !formData.quantity) {
@@ -79,34 +125,56 @@ const ProductsTab = ({ products = [] }: ProductsTabProps) => {
       return;
     }
 
-    const productData: Product = {
-      id: editingProduct?.id || Math.random().toString(36).substr(2, 9),
+    if (!user) return;
+
+    const productData = {
+      seller_id: user.id,
       name: formData.name,
       description: formData.description,
       category: formData.category,
       price: parseFloat(formData.price),
       quantity: parseInt(formData.quantity),
-      image: formData.image || '/api/placeholder/300/200',
-      status: parseInt(formData.quantity) > 0 ? 'active' : 'out_of_stock',
-      created_at: editingProduct?.created_at || new Date().toISOString()
+      image_url: formData.image || null,
+      status: parseInt(formData.quantity) > 0 ? 'active' : 'out_of_stock'
     };
 
-    if (editingProduct) {
-      setProductList(prev => prev.map(p => p.id === editingProduct.id ? productData : p));
+    try {
+      if (editingProduct) {
+        const { error } = await supabase
+          .from('products')
+          .update(productData)
+          .eq('id', editingProduct.id);
+
+        if (error) throw error;
+
+        toast({
+          title: "Success",
+          description: "Product updated successfully"
+        });
+      } else {
+        const { error } = await supabase
+          .from('products')
+          .insert([productData]);
+
+        if (error) throw error;
+
+        toast({
+          title: "Success", 
+          description: "Product added successfully"
+        });
+      }
+
+      resetForm();
+      setIsDialogOpen(false);
+      fetchProducts(); // Refresh the list
+    } catch (error) {
+      console.error('Error saving product:', error);
       toast({
-        title: "Success",
-        description: "Product updated successfully"
-      });
-    } else {
-      setProductList(prev => [...prev, productData]);
-      toast({
-        title: "Success", 
-        description: "Product added successfully"
+        title: "Error",
+        description: "Failed to save product",
+        variant: "destructive"
       });
     }
-
-    resetForm();
-    setIsDialogOpen(false);
   };
 
   const handleEdit = (product: Product) => {
@@ -122,12 +190,29 @@ const ProductsTab = ({ products = [] }: ProductsTabProps) => {
     setIsDialogOpen(true);
   };
 
-  const handleDelete = (id: string) => {
-    setProductList(prev => prev.filter(p => p.id !== id));
-    toast({
-      title: "Success",
-      description: "Product deleted successfully"
-    });
+  const handleDelete = async (id: string) => {
+    try {
+      const { error } = await supabase
+        .from('products')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Product deleted successfully"
+      });
+
+      fetchProducts(); // Refresh the list
+    } catch (error) {
+      console.error('Error deleting product:', error);
+      toast({
+        title: "Error",
+        description: "Failed to delete product",
+        variant: "destructive"
+      });
+    }
   };
 
   const getStatusColor = (status: string) => {

@@ -85,7 +85,7 @@ const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) =>
           </SidebarMenuItem>
           
           <SidebarMenuItem>
-            <SidebarMenuButton tooltip="Messages">
+            <SidebarMenuButton tooltip="Messages" isActive={activeTab === "messages"} onClick={() => setActiveTab("messages")}>
               <MessageSquare />
               <span>Messages</span>
               <SidebarMenuBadge>3</SidebarMenuBadge>

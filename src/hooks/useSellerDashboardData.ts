@@ -56,92 +56,83 @@ export const useSellerDashboardData = () => {
         setLoading(true);
         setError(null);
 
-        // For now, we'll create placeholder data since orders/inventory tables don't exist yet
-        // In a real app, you would fetch from actual tables
-        const mockOrders: Order[] = [
-          {
-            id: `ORD-${Date.now()}-1`,
-            customer_name: 'Sample Customer 1',
-            order_date: new Date().toISOString().split('T')[0],
-            items_count: 2,
-            total_amount: '₹850.00',
-            status: 'Pending'
-          },
-          {
-            id: `ORD-${Date.now()}-2`,
-            customer_name: 'Sample Customer 2',
-            order_date: new Date(Date.now() - 86400000).toISOString().split('T')[0],
-            items_count: 1,
-            total_amount: '₹320.00',
-            status: 'Completed'
-          }
-        ];
+        // Fetch real data from database
+        const today = new Date().toISOString().split('T')[0];
 
-        const mockInventory: InventoryItem[] = [
-          {
-            id: '1',
-            name: 'Sample Product 1',
-            sku: 'SKU-001',
-            category: 'General',
-            stock_quantity: 15,
-            price: '₹299.00',
-            status: 'In Stock'
-          },
-          {
-            id: '2',
-            name: 'Sample Product 2',
-            sku: 'SKU-002',
-            category: 'General',
-            stock_quantity: 2,
-            price: '₹150.00',
-            status: 'Low Stock'
-          },
-          {
-            id: '3',
-            name: 'Sample Product 3',
-            sku: 'SKU-003',
-            category: 'General',
-            stock_quantity: 0,
-            price: '₹450.00',
-            status: 'Out of Stock'
-          }
-        ];
+        // Fetch orders
+        const { data: ordersData, error: ordersError } = await supabase
+          .from('orders')
+          .select('*')
+          .eq('seller_id', user.id);
 
-        const mockMessages: CustomerMessage[] = [
-          {
-            id: '1',
-            customer_name: 'John Doe',
-            message: 'Is this product available for delivery today?',
-            created_at: new Date().toISOString(),
-            is_read: false
-          },
-          {
-            id: '2',
-            customer_name: 'Jane Smith',
-            message: 'Thank you for the quick service!',
-            created_at: new Date(Date.now() - 3600000).toISOString(),
-            is_read: false
-          }
-        ];
+        if (ordersError) throw ordersError;
 
-        const todayOrders = mockOrders.filter(order => 
-          order.order_date === new Date().toISOString().split('T')[0]
+        // Transform orders data
+        const transformedOrders: Order[] = (ordersData || []).map(order => ({
+          id: order.id,
+          customer_name: 'Customer', // We'll need to join with profiles later
+          order_date: new Date(order.created_at).toISOString().split('T')[0],
+          items_count: 1, // This will be calculated from order items later
+          total_amount: `₹${order.total_amount}`,
+          status: order.status
+        }));
+
+        // Fetch products (for inventory)
+        const { data: productsData, error: productsError } = await supabase
+          .from('products')
+          .select('*')
+          .eq('seller_id', user.id);
+
+        if (productsError) throw productsError;
+
+        // Transform products to inventory format
+        const transformedInventory: InventoryItem[] = (productsData || []).map(product => ({
+          id: product.id,
+          name: product.name,
+          sku: `SKU-${product.id.slice(0, 8)}`,
+          category: product.category,
+          stock_quantity: product.quantity,
+          price: `₹${product.price}`,
+          status: product.quantity > 5 ? 'In Stock' : product.quantity > 0 ? 'Low Stock' : 'Out of Stock'
+        }));
+
+        // Fetch messages
+        const { data: messagesData, error: messagesError } = await supabase
+          .from('messages')
+          .select('*')
+          .eq('receiver_id', user.id)
+          .order('created_at', { ascending: false });
+
+        if (messagesError) throw messagesError;
+
+        // Transform messages
+        const transformedMessages: CustomerMessage[] = (messagesData || []).map(message => ({
+          id: message.id,
+          customer_name: 'Customer', // We'll need to join with profiles later
+          message: message.message,
+          created_at: message.created_at,
+          is_read: message.is_read
+        }));
+
+        // Calculate stats
+        const todayOrders = transformedOrders.filter(order => 
+          order.order_date === today
         ).length;
 
-        const todayRevenue = mockOrders
-          .filter(order => order.order_date === new Date().toISOString().split('T')[0])
+        const todayRevenue = transformedOrders
+          .filter(order => order.order_date === today)
           .reduce((total, order) => {
             const amount = parseFloat(order.total_amount.replace('₹', '').replace(',', ''));
             return total + amount;
           }, 0);
 
-        const inventoryAlerts = mockInventory.filter(item => 
+        const inventoryAlerts = transformedInventory.filter(item => 
           item.stock_quantity <= 5
         ).length;
 
-        setOrders(mockOrders);
-        setInventory(mockInventory);
-        setMessages(mockMessages);
+        setOrders(transformedOrders);
+        setInventory(transformedInventory);
+        setMessages(transformedMessages);
         setStats({
           todayOrders,
           todayRevenue: `₹${todayRevenue.toLocaleString()}`,
