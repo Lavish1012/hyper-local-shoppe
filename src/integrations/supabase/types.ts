@@ -16,20 +16,14 @@ export type Database = {
     Tables: {
       customer_profiles: {
         Row: {
-          address: string | null
           age: number | null
           area_street: string | null
           city: string | null
           created_at: string
-          house_number: string | null
           id: string
-          landmark: string | null
-          location_lat: number | null
-          location_lng: number | null
           notifications_email: boolean | null
           notifications_sms: boolean | null
           onboarding_completed: boolean | null
-          pincode: string | null
           preferred_language: string | null
           shopping_preferences:
             | Database["public"]["Enums"]["product_category"][]
@@ -39,20 +33,14 @@ export type Database = {
           user_id: string
         }
         Insert: {
-          address?: string | null
           age?: number | null
           area_street?: string | null
           city?: string | null
           created_at?: string
-          house_number?: string | null
           id?: string
-          landmark?: string | null
-          location_lat?: number | null
-          location_lng?: number | null
           notifications_email?: boolean | null
           notifications_sms?: boolean | null
           onboarding_completed?: boolean | null
-          pincode?: string | null
           preferred_language?: string | null
           shopping_preferences?:
             | Database["public"]["Enums"]["product_category"][]
@@ -62,20 +50,14 @@ export type Database = {
           user_id: string
         }
         Update: {
-          address?: string | null
           age?: number | null
           area_street?: string | null
           city?: string | null
           created_at?: string
-          house_number?: string | null
           id?: string
-          landmark?: string | null
-          location_lat?: number | null
-          location_lng?: number | null
           notifications_email?: boolean | null
           notifications_sms?: boolean | null
           onboarding_completed?: boolean | null
-          pincode?: string | null
           preferred_language?: string | null
           shopping_preferences?:
             | Database["public"]["Enums"]["product_category"][]

@@ -107,25 +107,39 @@ export function CustomerOnboarding({ onComplete }: CustomerOnboardingProps) {
 
     setIsLoading(true);
     try {
-      const { error } = await supabase
+      // First, insert basic profile data (non-sensitive)
+      const { error: profileError } = await supabase
         .from('customer_profiles')
         .insert({
           user_id: user.id,
           age: data.age || null,
           preferred_language: data.preferredLanguage,
-          house_number: data.houseNumber || null,
           area_street: data.areaStreet || null,
-          landmark: data.landmark || null,
           city: data.city || null,
           state: data.state || null,
-          pincode: data.pincode || null,
           shopping_preferences: data.shoppingPreferences as any,
           notifications_sms: data.notificationsSms,
           notifications_email: data.notificationsEmail,
           onboarding_completed: true,
         });
 
-      if (error) throw error;
+      if (profileError) throw profileError;
+
+      // Then, insert sensitive data if any exists
+      const hasSensitiveData = data.houseNumber || data.landmark || data.pincode;
+      if (hasSensitiveData) {
+        const { error: sensitiveError } = await supabase
+          .from('customer_sensitive_data')
+          .insert({
+            user_id: user.id,
+            house_number: data.houseNumber || null,
+            landmark: data.landmark || null,
+            pincode: data.pincode || null,
+            address: `${data.houseNumber ? data.houseNumber + ', ' : ''}${data.areaStreet || ''}${data.landmark ? ', ' + data.landmark : ''}`.trim(),
+          });
+
+        if (sensitiveError) throw sensitiveError;
+      }
 
       toast({
         title: 'Welcome aboard! 🎉',
