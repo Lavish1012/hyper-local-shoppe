@@ -7,6 +7,7 @@ import DashboardSidebar from "./seller-dashboard/DashboardSidebar";
 import DashboardTab from "./seller-dashboard/tabs/DashboardTab";
 import OrdersTab from "./seller-dashboard/tabs/OrdersTab";
 import InventoryTab from "./seller-dashboard/tabs/InventoryTab";
+import ProductsTab from "./seller-dashboard/tabs/ProductsTab";
 import { useSellerDashboardData } from "@/hooks/useSellerDashboardData";
 
 const SellerDashboard = () => {
@@ -51,6 +52,7 @@ const SellerDashboard = () => {
                 <TabsTrigger value="dashboard">Overview</TabsTrigger>
                 <TabsTrigger value="orders">Orders</TabsTrigger>
                 <TabsTrigger value="inventory">Inventory</TabsTrigger>
+                <TabsTrigger value="products">Products</TabsTrigger>
               </TabsList>
               
               <TabsContent value="dashboard">
@@ -63,6 +65,10 @@ const SellerDashboard = () => {
               
               <TabsContent value="inventory">
                 <InventoryTab inventoryItems={inventory} />
+              </TabsContent>
+              
+              <TabsContent value="products">
+                <ProductsTab />
               </TabsContent>
             </Tabs>
           </div>

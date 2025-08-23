@@ -64,6 +64,13 @@ const DashboardSidebar = ({ activeTab, setActiveTab }: DashboardSidebarProps) =>
           </SidebarMenuItem>
           
           <SidebarMenuItem>
+            <SidebarMenuButton tooltip="Products" isActive={activeTab === "products"} onClick={() => setActiveTab("products")}>
+              <ShoppingBag />
+              <span>Products</span>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          
+          <SidebarMenuItem>
             <SidebarMenuButton tooltip="Customers">
               <Users />
               <span>Customers</span>

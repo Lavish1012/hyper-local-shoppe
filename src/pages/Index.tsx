@@ -43,24 +43,24 @@ const Index = () => {
         initial="initial"
         animate="animate"
       >
-        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/1080" aria-label="Hero Section">
+        <section data-scroll-section data-bg-image="/api/placeholder/1920/1080" aria-label="Hero Section" className="min-h-screen">
           <HeroSection />
-        </motion.div>
-        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/900" aria-label="Categories Section">
+        </section>
+        <section data-scroll-section data-bg-image="/api/placeholder/1920/900" aria-label="Categories Section" className="min-h-screen">
           <CategorySection />
-        </motion.div>
-        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/800" aria-label="How It Works Section">
+        </section>
+        <section data-scroll-section data-bg-image="/api/placeholder/1920/800" aria-label="How It Works Section" className="min-h-screen">
           <HowItWorks />
-        </motion.div>
-        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/950" aria-label="Shop Section">
+        </section>
+        <section data-scroll-section data-bg-image="/api/placeholder/1920/950" aria-label="Shop Section" className="min-h-screen">
           <ShopSection />
-        </motion.div>
-        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/850" aria-label="Features Section">
+        </section>
+        <section data-scroll-section data-bg-image="/api/placeholder/1920/850" aria-label="Features Section" className="min-h-screen">
           <FeaturesSection />
-        </motion.div>
-        <motion.div variants={fadeInUp} data-scroll-section data-bg-image="/api/placeholder/1920/900" aria-label="Testimonials Section">
+        </section>
+        <section data-scroll-section data-bg-image="/api/placeholder/1920/900" aria-label="Testimonials Section" className="min-h-screen">
           <TestimonialSection />
-        </motion.div>
+        </section>
       </motion.main>
       <Footer />
     </div>

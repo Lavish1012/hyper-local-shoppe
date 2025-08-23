@@ -7,13 +7,13 @@ const HeroSection = () => {
     <div className="hero-pattern py-16 lg:py-24">
       <div className="container mx-auto px-4">
         <div className="flex flex-col-reverse lg:flex-row items-center">
-          <div className="lg:w-1/2 mt-10 lg:mt-0 animate-fade-in">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
-              Find <span className="text-market-primary">local products</span> from shops near you
-            </h1>
-            <p className="mt-4 text-xl text-gray-600 md:pr-10">
-              Discover hard-to-find items at nearby stores in real-time. Support local businesses while getting what you need, when you need it.
-            </p>
+        <div data-scroll-text className="lg:w-1/2 mt-10 lg:mt-0 animate-fade-in">
+          <h1 data-scroll-text className="text-4xl md:text-5xl font-bold text-gray-900 leading-tight">
+            Find <span className="text-market-primary">local products</span> from shops near you
+          </h1>
+          <p data-scroll-text className="mt-4 text-xl text-gray-600 md:pr-10">
+            Discover hard-to-find items at nearby stores in real-time. Support local businesses while getting what you need, when you need it.
+          </p>
             
             <div className="mt-8 bg-white p-4 rounded-lg shadow-lg max-w-lg">
               <div className="flex items-center space-x-2 mb-4">
